@@ -72,12 +72,18 @@ def send_email(subject: str, markdown_body: str) -> None:
     message.attach(MIMEText(markdown_body, "plain", "utf-8"))
     message.attach(MIMEText(markdown_to_basic_html(markdown_body), "html", "utf-8"))
 
-    if smtp_port == 465:
-        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
-            server.login(sender, password)
-            server.sendmail(sender, [receiver], message.as_string())
-    else:
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
-            server.starttls()
-            server.login(sender, password)
-            server.sendmail(sender, [receiver], message.as_string())
+    try:
+        if smtp_port == 465:
+            with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+                server.login(sender, password)
+                server.sendmail(sender, [receiver], message.as_string())
+        else:
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(sender, password)
+                server.sendmail(sender, [receiver], message.as_string())
+    except smtplib.SMTPAuthenticationError as exc:
+        raise RuntimeError(
+            "SMTP authentication failed. Check EMAIL_SENDER and EMAIL_PASSWORD. "
+            "For Gmail, use a Google App Password instead of your normal account password."
+        ) from exc
