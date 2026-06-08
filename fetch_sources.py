@@ -212,7 +212,7 @@ def fetch_github_trending(max_results: int = 10) -> list[Project]:
 
 
 def fetch_github_search(max_results: int = 10) -> list[Project]:
-    token = os.getenv("GITHUB_TOKEN")
+    token = os.getenv("GH_TOKEN")
     headers = {**DEFAULT_HEADERS}
     if token:
         headers["Authorization"] = f"Bearer {token}"

@@ -33,7 +33,7 @@ jobs:
           EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           MAX_PAPERS: ${{ vars.MAX_PAPERS || '20' }}
           MAX_PROJECTS: ${{ vars.MAX_PROJECTS || '10' }}
         run: python main.py

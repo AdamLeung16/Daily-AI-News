@@ -51,7 +51,7 @@ EMAIL_PASSWORD=your_email_password_or_smtp_authorization_code
 EMAIL_RECEIVER=receiver@example.com
 SMTP_SERVER=smtp.example.com
 SMTP_PORT=465
-GITHUB_TOKEN=
+GH_TOKEN=
 ```
 
 4. 手动运行：
@@ -99,10 +99,10 @@ EMAIL_PASSWORD
 EMAIL_RECEIVER
 SMTP_SERVER
 SMTP_PORT
-GITHUB_TOKEN
+GH_TOKEN
 ```
 
-`GITHUB_TOKEN` 可选。添加后 GitHub Search API 额度更稳定。
+`GH_TOKEN` 可选。添加后 GitHub Search API 额度更稳定。
 
 可选添加以下 Repository variables：
 
