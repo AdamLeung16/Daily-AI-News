@@ -2,8 +2,8 @@ name: Daily AI News
 
 on:
   schedule:
-    # Beijing time 08:30 = UTC 00:30
-    - cron: "30 0 * * *"
+    # Beijing time 07:47 = UTC 23:47
+    - cron: "47 23 * * *"
   workflow_dispatch:
 
 jobs:

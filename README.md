@@ -1,6 +1,6 @@
 # 每日 AI 技术速报
 
-这个项目会在每天北京时间 8:30 自动抓取大公司最新 AI 技术成果、产品发布、突破动态和 AI 行业热点新闻，调用 DeepSeek API 生成中文摘要，并发送到指定邮箱。
+这个项目会在每天北京时间 7:47 自动抓取大公司最新 AI 技术成果、产品发布、突破动态和 AI 行业热点新闻，调用 DeepSeek API 生成中文摘要，并发送到指定邮箱。
 
 ## 数据来源
 
@@ -85,12 +85,12 @@ python main.py
 
 ## GitHub Actions 部署
 
-GitHub Actions 使用 UTC 时间。北京时间是 UTC+8，所以北京时间每天 8:30 对应 UTC 每天 0:30。
+GitHub Actions 使用 UTC 时间。北京时间是 UTC+8，所以北京时间每天 7:47 对应 UTC 每天 23:47。
 
 本项目的 workflow 使用：
 
 ```yaml
-cron: "30 0 * * *"
+cron: "47 23 * * *"
 ```
 
 部署步骤：
@@ -131,14 +131,14 @@ crontab -e
 添加以下任务。请把路径替换为你的实际项目路径：
 
 ```cron
-30 8 * * * cd /path/to/DailyAINews && /path/to/DailyAINews/.venv/bin/python main.py >> /path/to/DailyAINews/cron.log 2>&1
+47 7 * * * cd /path/to/DailyAINews && /path/to/DailyAINews/.venv/bin/python main.py >> /path/to/DailyAINews/cron.log 2>&1
 ```
 
 如果服务器不是北京时间，建议显式设置时区：
 
 ```cron
 TZ=Asia/Shanghai
-30 8 * * * cd /path/to/DailyAINews && /path/to/DailyAINews/.venv/bin/python main.py >> /path/to/DailyAINews/cron.log 2>&1
+47 7 * * * cd /path/to/DailyAINews && /path/to/DailyAINews/.venv/bin/python main.py >> /path/to/DailyAINews/cron.log 2>&1
 ```
 
 ## 自定义
