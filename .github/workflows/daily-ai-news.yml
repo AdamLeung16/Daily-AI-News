@@ -35,7 +35,6 @@ jobs:
           EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          MAX_PAPERS: ${{ vars.MAX_PAPERS || '20' }}
-          MAX_PROJECTS: ${{ vars.MAX_PROJECTS || '10' }}
+          MAX_COMPANY_UPDATES: ${{ vars.MAX_COMPANY_UPDATES || '24' }}
+          MAX_HOT_NEWS: ${{ vars.MAX_HOT_NEWS || '24' }}
         run: python main.py

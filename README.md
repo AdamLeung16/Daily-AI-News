@@ -1,14 +1,20 @@
 # 每日 AI 技术速报
 
-这个项目会在每天北京时间 8:30 自动抓取最新 AI 论文、开源项目和官方技术动态，调用 DeepSeek API 生成中文摘要，并发送到指定邮箱。
+这个项目会在每天北京时间 8:30 自动抓取大公司最新 AI 技术成果、产品发布、突破动态和 AI 行业热点新闻，调用 DeepSeek API 生成中文摘要，并发送到指定邮箱。
 
 ## 数据来源
 
-- arXiv：`cs.AI`、`cs.LG`、`cs.CL`、`cs.CV`
-- GitHub Trending 与 GitHub Search：AI、LLM、Agent、RAG、多模态相关项目
-- Papers with Code RSS
-- Hugging Face Papers / Models
-- OpenAI、Google DeepMind、Anthropic、Meta AI 官方博客 RSS
+- 大公司官方动态：OpenAI、Google DeepMind、Google AI、Anthropic、Meta AI、Microsoft AI、NVIDIA AI、AWS Machine Learning、Apple Machine Learning
+- AI 热点新闻：Google News AI、TechCrunch AI、The Verge AI、VentureBeat AI、MIT Technology Review
+- 重点关注：大模型、Agent、多模态、AI 基础设施、芯片、企业 AI、安全治理、产业竞争和应用落地
+
+## 邮件内容
+
+- 今日 AI 技术总览
+- 大公司技术成果与突破动态
+- 今日 AI 热点新闻
+- 大模型 / Agent / 多模态 / AI 基础设施趋势
+- 今日最值得关注的 1–2 件事
 
 ## 项目结构
 
@@ -51,7 +57,8 @@ EMAIL_PASSWORD=your_email_password_or_smtp_authorization_code
 EMAIL_RECEIVER=receiver@example.com
 SMTP_SERVER=smtp.example.com
 SMTP_PORT=465
-GH_TOKEN=
+MAX_COMPANY_UPDATES=24
+MAX_HOT_NEWS=24
 ```
 
 4. 手动运行：
@@ -99,18 +106,15 @@ EMAIL_PASSWORD
 EMAIL_RECEIVER
 SMTP_SERVER
 SMTP_PORT
-GH_TOKEN
 ```
-
-`GH_TOKEN` 可选。添加后 GitHub Search API 额度更稳定。
 
 可选添加以下 Repository variables：
 
 ```text
 DEEPSEEK_MODEL
 DEEPSEEK_BASE_URL
-MAX_PAPERS
-MAX_PROJECTS
+MAX_COMPANY_UPDATES
+MAX_HOT_NEWS
 ```
 
 4. 打开 `Actions` 页面，启用 workflow。
@@ -141,7 +145,7 @@ TZ=Asia/Shanghai
 
 - `DEEPSEEK_MODEL`：修改总结使用的模型，默认 `deepseek-chat`
 - `DEEPSEEK_BASE_URL`：DeepSeek OpenAI-compatible API 地址，默认 `https://api.deepseek.com`
-- `MAX_PAPERS`：控制论文抓取数量，默认 `20`
-- `MAX_PROJECTS`：控制项目抓取数量，默认 `10`
+- `MAX_COMPANY_UPDATES`：控制大公司官方动态抓取数量，默认 `24`
+- `MAX_HOT_NEWS`：控制 AI 热点新闻抓取数量，默认 `24`
 
 抓取逻辑在 `fetch_sources.py`，总结提示词在 `summarize.py`，邮件样式和 SMTP 发送逻辑在 `send_email.py`。
