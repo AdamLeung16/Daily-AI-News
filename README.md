@@ -16,6 +16,13 @@
 - 大模型 / Agent / 多模态 / AI 基础设施趋势
 - 今日最值得关注的 1–2 件事
 
+## 示例邮件
+
+GitHub README 不能直接渲染 `.eml` 邮件文件，但可以下载后用邮件客户端打开：
+
+- [示例邮件 EML](examples/%E3%80%90%E6%AF%8F%E6%97%A5AI%E6%8A%80%E6%9C%AF%E9%80%9F%E6%8A%A5%E3%80%912026-07-17.eml)
+- [示例邮件 HTML 预览](examples/daily-ai-news-example.html)
+
 ## 项目结构
 
 ```text
@@ -85,7 +92,7 @@ python main.py
 
 ## GitHub Actions 部署
 
-GitHub Actions 使用 UTC 时间。北京时间是 UTC+8，所以北京时间每天 7:47 对应 UTC 每天 23:47。
+GitHub Actions 使用 UTC 时间。北京时间是 UTC+8，所以北京时间每天 7:47 对应 UTC 每天 23:47。（GitHub Actions定时任务受到负载影响有延迟，经测试约9点-9点半之间收到，刚好在上班前地铁上可以阅读新闻）
 
 本项目的 workflow 使用：
 
