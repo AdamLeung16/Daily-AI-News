@@ -4,8 +4,8 @@
 
 ## 数据来源
 
-- 大公司官方动态：OpenAI、Google DeepMind、Google AI、Anthropic、Meta AI、Microsoft AI、NVIDIA AI、AWS Machine Learning、Apple Machine Learning
-- AI 热点新闻：Google News AI、TechCrunch AI、The Verge AI、VentureBeat AI、MIT Technology Review
+- 大公司官方动态：OpenAI、Google DeepMind、Google AI、Anthropic、Meta AI、Microsoft AI、NVIDIA AI、AWS Machine Learning、Apple Machine Learning、阿里 Qwen/通义千问、DeepSeek、Kimi/月之暗面等
+- AI 热点新闻：Google News AI、Google News China AI、TechCrunch AI、The Verge AI、VentureBeat AI、MIT Technology Review
 - 重点关注：大模型、Agent、多模态、AI 基础设施、芯片、企业 AI、安全治理、产业竞争和应用落地
 
 ## 邮件内容
@@ -57,7 +57,7 @@ EMAIL_PASSWORD=your_email_password_or_smtp_authorization_code
 EMAIL_RECEIVER=receiver@example.com
 SMTP_SERVER=smtp.example.com
 SMTP_PORT=465
-MAX_COMPANY_UPDATES=24
+MAX_COMPANY_UPDATES=36
 MAX_HOT_NEWS=24
 ```
 
@@ -145,7 +145,7 @@ TZ=Asia/Shanghai
 
 - `DEEPSEEK_MODEL`：修改总结使用的模型，默认 `deepseek-chat`
 - `DEEPSEEK_BASE_URL`：DeepSeek OpenAI-compatible API 地址，默认 `https://api.deepseek.com`
-- `MAX_COMPANY_UPDATES`：控制大公司官方动态抓取数量，默认 `24`
+- `MAX_COMPANY_UPDATES`：控制大公司官方动态抓取数量，默认 `36`
 - `MAX_HOT_NEWS`：控制 AI 热点新闻抓取数量，默认 `24`
 
 抓取逻辑在 `fetch_sources.py`，总结提示词在 `summarize.py`，邮件样式和 SMTP 发送逻辑在 `send_email.py`。

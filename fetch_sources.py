@@ -39,6 +39,24 @@ AI_KEYWORDS = [
     "gemini",
     "claude",
     "chatgpt",
+    "qwen",
+    "通义",
+    "千问",
+    "deepseek",
+    "kimi",
+    "moonshot",
+    "月之暗面",
+    "doubao",
+    "豆包",
+    "zhipu",
+    "智谱",
+    "minimax",
+    "baidu",
+    "ernie",
+    "文心",
+    "tencent",
+    "hunyuan",
+    "混元",
 ]
 
 
@@ -55,6 +73,8 @@ class NewsItem:
 def _get(url: str, *, params: dict[str, Any] | None = None, timeout: int = 20) -> requests.Response:
     response = requests.get(url, headers=DEFAULT_HEADERS, params=params, timeout=timeout)
     response.raise_for_status()
+    if response.apparent_encoding:
+        response.encoding = response.apparent_encoding
     return response
 
 
@@ -167,20 +187,29 @@ def _fetch_feed_items(
     return items
 
 
-def fetch_company_updates(max_results: int = 24) -> list[NewsItem]:
+def fetch_company_updates(max_results: int = 36) -> list[NewsItem]:
     feeds = {
         "OpenAI": "https://openai.com/news/rss.xml",
         "Google AI": "https://blog.google/technology/ai/rss/",
         "NVIDIA AI": "https://blogs.nvidia.com/blog/category/deep-learning/feed/",
         "AWS Machine Learning": "https://aws.amazon.com/blogs/machine-learning/feed/",
     }
-    pages = {
+    china_pages = {
+        "Alibaba Qwen": "https://qwenlm.github.io/blog/",
+        "Qwen Official": "https://qwen.ai/blog/",
+        "DeepSeek": "https://www.deepseek.com/transparency/",
+        "DeepSeek Home": "https://www.deepseek.com/",
+        "Kimi": "https://platform.kimi.com/blog",
+        "Moonshot AI": "https://www.moonshot.ai/",
+    }
+    global_pages = {
         "Google DeepMind": "https://deepmind.google/blog/",
         "Anthropic": "https://www.anthropic.com/news",
         "Meta AI": "https://ai.meta.com/blog/",
         "Microsoft AI": "https://news.microsoft.com/source/topics/ai/",
         "Apple Machine Learning": "https://machinelearning.apple.com/",
     }
+    pages = {**china_pages, **global_pages}
     items: list[NewsItem] = []
     for source, url in feeds.items():
         try:
@@ -189,7 +218,7 @@ def fetch_company_updates(max_results: int = 24) -> list[NewsItem]:
                     source,
                     url,
                     category="company_update",
-                    max_results=4,
+                    max_results=3,
                     days=10,
                     keyword_filter=False,
                 )
@@ -198,7 +227,7 @@ def fetch_company_updates(max_results: int = 24) -> list[NewsItem]:
             print(f"Warning: {source} feed failed: {exc}")
     for source, url in pages.items():
         try:
-            items.extend(fetch_company_page(source, url, max_results=4))
+            items.extend(fetch_company_page(source, url, max_results=3))
         except requests.RequestException as exc:
             print(f"Warning: {source} page failed: {exc}")
     return _dedupe_items(items)[:max_results]
@@ -220,12 +249,50 @@ def fetch_company_page(source: str, url: str, max_results: int = 4) -> list[News
         "newsletter",
         "sign up",
         "learn more",
+        "moonshot ai blogs",
+        "研究",
+        "产品",
+        "资源",
+        "关于",
+        "新闻",
+        "博客",
+        "隐私政策",
+        "服务条款",
+        "登录",
+        "注册",
+        "了解更多",
     }
     items: list[NewsItem] = []
+    for article in soup.find_all("article"):
+        title_node = article.select_one(".entry-header, h1, h2, h3")
+        link_node = article.find("a", href=True)
+        title = _clean_text(title_node.get_text(" ")) if title_node else ""
+        if not title or not link_node:
+            continue
+        min_title_len = 6 if re.search(r"[\u4e00-\u9fff]", title) else 12
+        if len(title) < min_title_len or len(title) > 180:
+            continue
+        link = urljoin(url, link_node["href"])
+        summary = _clean_text(article.get_text(" "))[:900]
+        items.append(
+            NewsItem(
+                title=title,
+                link=link,
+                summary=summary or f"{source} 官方页面发布或展示的 AI 技术/产品动态。",
+                source=source,
+                category="company_update",
+            )
+        )
+        if len(_dedupe_items(items)) >= max_results:
+            break
+    if items:
+        return _dedupe_items(items)[:max_results]
+
     for anchor in soup.find_all("a", href=True):
         title = _clean_text(anchor.get_text(" "))
         normalized = title.lower().strip()
-        if normalized in blocked_titles or len(title) < 18 or len(title) > 180:
+        min_title_len = 6 if re.search(r"[\u4e00-\u9fff]", title) else 18
+        if normalized in blocked_titles or len(title) < min_title_len or len(title) > 180:
             continue
         if title.lower().startswith(("image:", "tag:", "skip to ")):
             continue
@@ -247,11 +314,15 @@ def fetch_company_page(source: str, url: str, max_results: int = 4) -> list[News
 
 
 def fetch_hot_ai_news(max_results: int = 24) -> list[NewsItem]:
-    query = quote_plus(
-        '(AI OR "artificial intelligence" OR OpenAI OR Anthropic OR DeepMind OR Gemini OR ChatGPT OR Claude) when:3d'
+    global_query = quote_plus(
+        '(AI OR "artificial intelligence" OR OpenAI OR Anthropic OR DeepMind OR Gemini OR ChatGPT OR Claude OR Qwen OR DeepSeek OR Kimi OR Moonshot) when:3d'
+    )
+    china_query = quote_plus(
+        '(AI OR 人工智能 OR 大模型 OR Qwen OR 通义千问 OR DeepSeek OR Kimi OR 月之暗面 OR 豆包 OR 智谱 OR MiniMax OR 百度文心 OR 腾讯混元) when:3d'
     )
     feeds = {
-        "Google News AI": f"https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en",
+        "Google News AI": f"https://news.google.com/rss/search?q={global_query}&hl=en-US&gl=US&ceid=US:en",
+        "Google News China AI": f"https://news.google.com/rss/search?q={china_query}&hl=zh-CN&gl=CN&ceid=CN:zh-Hans",
         "TechCrunch AI": "https://techcrunch.com/category/artificial-intelligence/feed/",
         "The Verge AI": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
         "VentureBeat AI": "https://venturebeat.com/category/ai/feed/",
@@ -287,7 +358,7 @@ def _dedupe_items(items: list[NewsItem]) -> list[NewsItem]:
 
 
 def collect_sources() -> dict[str, Any]:
-    max_company_updates = int(os.getenv("MAX_COMPANY_UPDATES", "24"))
+    max_company_updates = int(os.getenv("MAX_COMPANY_UPDATES", "36"))
     max_hot_news = int(os.getenv("MAX_HOT_NEWS", "24"))
 
     def safe_fetch(fetcher: Any, *args: Any, **kwargs: Any) -> list[Any]:

@@ -35,6 +35,6 @@ jobs:
           EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          MAX_COMPANY_UPDATES: ${{ vars.MAX_COMPANY_UPDATES || '24' }}
+          MAX_COMPANY_UPDATES: ${{ vars.MAX_COMPANY_UPDATES || '36' }}
           MAX_HOT_NEWS: ${{ vars.MAX_HOT_NEWS || '24' }}
         run: python main.py
