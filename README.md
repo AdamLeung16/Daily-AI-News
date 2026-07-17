@@ -18,9 +18,8 @@
 
 ## 示例邮件
 
-GitHub README 不能直接渲染 `.eml` 邮件文件，但可以下载后用邮件客户端打开：
+GitHub 仓库页面会把 `.html` 当源码展示，不能直接以内嵌网页形式渲染。可以下载后用浏览器打开，或通过 GitHub Pages / raw.githack 等静态预览服务查看效果：
 
-- [示例邮件 EML](examples/%E3%80%90%E6%AF%8F%E6%97%A5AI%E6%8A%80%E6%9C%AF%E9%80%9F%E6%8A%A5%E3%80%912026-07-17.eml)
 - [示例邮件 HTML 预览](examples/daily-ai-news-example.html)
 
 ## 项目结构
